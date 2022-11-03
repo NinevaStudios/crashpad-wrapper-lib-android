@@ -1,0 +1,118 @@
+rule copy
+  command = ln -f ${in} ${out} 2>/dev/null || (rm -rf ${out} && cp -af ${in} ${out})
+  description = COPY ${in} ${out}
+rule asm
+  command = /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android21-clang++ -MMD -MF ${out}.d ${defines} ${include_dirs} ${asmflags} -c ${in} -o ${out}
+  description = ASM ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule alink
+  command = rm -f ${out}; /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android-ar rcsD ${arflags} ${out} ${in}
+  description = AR ${out}
+rule solink_module
+  command = /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android21-clang++ -shared ${ldflags} -o "${output_dir}/${target_output_name}${output_extension}" -Wl,-soname="${target_output_name}${output_extension}" -Wl,--whole-archive ${in} ${solibs} ${frameworks} -Wl,--no-whole-archive  ${libs}
+  description = SOLINK_MODULE ${output_dir}/${target_output_name}${output_extension}
+rule link
+  command = /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android21-clang++ ${ldflags} -o "${output_dir}/${target_output_name}${output_extension}" -Wl,--start-group ${in} ${solibs} ${frameworks} -Wl,--end-group ${libs}
+  description = LINK ${output_dir}/${target_output_name}${output_extension}
+rule stamp
+  command = touch ${out}
+  description = STAMP ${out}
+rule cc
+  command = /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android21-clang -MMD -MF ${out}.d ${defines} ${include_dirs} ${framework_dirs} ${cflags} ${cflags_c} -c ${in} -o ${out}
+  description = CC ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule cxx
+  command = /Users/nineva/Library/Android/sdk/ndk/21.4.7075529/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android21-clang++ -MMD -MF ${out}.d ${defines} ${include_dirs} ${framework_dirs} ${cflags} ${cflags_cc} -c ${in} -o ${out}
+  description = CXX ${out}
+  depfile = ${out}.d
+  deps = gcc
+
+subninja obj/crashpad_client_test.ninja
+subninja obj/crashpad_handler_test.ninja
+subninja obj/crashpad_minidump_test.ninja
+subninja obj/crashpad_snapshot_test.ninja
+subninja obj/crashpad_test_test.ninja
+subninja obj/crashpad_util_test.ninja
+build obj/build/default_exe_manifest_win.stamp: stamp
+subninja obj/client/client.ninja
+subninja obj/client/client_test.ninja
+subninja obj/client/common.ninja
+subninja obj/client/pthread_create.ninja
+subninja obj/compat/compat.ninja
+subninja obj/handler/common.ninja
+subninja obj/handler/crashpad_handler.ninja
+subninja obj/handler/crashpad_handler_main.ninja
+build libcrashpad_handler.so: copy crashpad_handler || ./crashpad_handler
+
+build obj/handler/crashpad_handler_named_as_so.stamp: stamp libcrashpad_handler.so
+subninja obj/handler/crashpad_handler_test_extended_handler.ninja
+subninja obj/handler/crashpad_handler_trampoline.ninja
+subninja obj/handler/handler.ninja
+subninja obj/handler/handler_test.ninja
+subninja obj/minidump/format.ninja
+subninja obj/minidump/minidump.ninja
+subninja obj/minidump/minidump_test.ninja
+subninja obj/minidump/test_support.ninja
+subninja obj/snapshot/context.ninja
+subninja obj/snapshot/crashpad_snapshot_test_both_dt_hash_styles.ninja
+subninja obj/snapshot/crashpad_snapshot_test_module.ninja
+subninja obj/snapshot/crashpad_snapshot_test_module_large.ninja
+subninja obj/snapshot/crashpad_snapshot_test_module_small.ninja
+subninja obj/snapshot/snapshot.ninja
+subninja obj/snapshot/snapshot_test.ninja
+build obj/snapshot/snapshot_test_ios_data.stamp: stamp ../../snapshot/ios/testdata/crash-1fa088dda0adb41459d063078a0f384a0bb8eefa ../../snapshot/ios/testdata/crash-5726011582644224 ../../snapshot/ios/testdata/crash-6605504629637120
+subninja obj/snapshot/test_support.ninja
+subninja obj/test/crashpad_test_test_multiprocess_exec_test_child.ninja
+subninja obj/test/googlemock_main.ninja
+subninja obj/test/googletest_main.ninja
+subninja obj/test/test.ninja
+subninja obj/test/test_test.ninja
+subninja obj/third_party/googletest/gmock_all_test.ninja
+subninja obj/third_party/googletest/gmock_link_test.ninja
+subninja obj/third_party/googletest/gmock_stress_test.ninja
+subninja obj/third_party/googletest/googlemock.ninja
+build obj/third_party/googletest/googlemock_all_tests.stamp: stamp ./gmock_all_test ./gmock_link_test ./gmock_stress_test
+subninja obj/third_party/googletest/googlemock_main.ninja
+subninja obj/third_party/googletest/googletest.ninja
+build obj/third_party/googletest/googletest_all_tests.stamp: stamp ./gtest_all_test ./gtest_environment_test ./gtest_listener_test ./gtest_macro_stack_footprint_test ./gtest_no_test ./gtest_param_test ./gtest_premature_exit_test ./gtest_repeat_test ./gtest_skip_in_environment_setup_test ./gtest_sole_header_test ./gtest_stress_test ./gtest_unittest_api_test
+subninja obj/third_party/googletest/googletest_main.ninja
+subninja obj/third_party/googletest/gtest_all_test.ninja
+subninja obj/third_party/googletest/gtest_environment_test.ninja
+subninja obj/third_party/googletest/gtest_listener_test.ninja
+subninja obj/third_party/googletest/gtest_macro_stack_footprint_test.ninja
+subninja obj/third_party/googletest/gtest_no_test.ninja
+subninja obj/third_party/googletest/gtest_param_test.ninja
+subninja obj/third_party/googletest/gtest_premature_exit_test.ninja
+subninja obj/third_party/googletest/gtest_repeat_test.ninja
+subninja obj/third_party/googletest/gtest_skip_in_environment_setup_test.ninja
+subninja obj/third_party/googletest/gtest_sole_header_test.ninja
+subninja obj/third_party/googletest/gtest_stress_test.ninja
+subninja obj/third_party/googletest/gtest_unittest_api_test.ninja
+subninja obj/third_party/lss/lss.ninja
+build obj/third_party/mini_chromium/base.stamp: stamp obj/third_party/mini_chromium/mini_chromium/base/libbase.a
+build obj/third_party/mini_chromium/base_test_support.stamp: stamp
+build obj/third_party/mini_chromium/build.stamp: stamp obj/third_party/mini_chromium/mini_chromium/build/build.stamp
+build obj/third_party/mini_chromium/chromeos_buildflags.stamp: stamp obj/third_party/mini_chromium/mini_chromium/build/chromeos_buildflags.stamp
+subninja obj/third_party/mini_chromium/mini_chromium/base/base.ninja
+subninja obj/third_party/mini_chromium/mini_chromium/build/build.ninja
+subninja obj/third_party/mini_chromium/mini_chromium/build/buildflag_header_h.ninja
+rule __third_party_mini_chromium_mini_chromium_build_chromeos_buildflags___third_party_mini_chromium_mini_chromium_build_config_gcc_like_toolchain__rule
+  command = python3 ../../third_party/mini_chromium/mini_chromium/build/write_buildflag_header.py --output build/chromeos_buildflags.h --rulename //third_party/mini_chromium/mini_chromium/build$:chromeos_buildflags --gen-dir gen --definitions gen/build/chromeos_buildflags.h.flags
+  description = ACTION //third_party/mini_chromium/mini_chromium/build:chromeos_buildflags(//third_party/mini_chromium/mini_chromium/build/config:gcc_like_toolchain)
+  restat = 1
+
+build gen/build/chromeos_buildflags.h: __third_party_mini_chromium_mini_chromium_build_chromeos_buildflags___third_party_mini_chromium_mini_chromium_build_config_gcc_like_toolchain__rule | ../../third_party/mini_chromium/mini_chromium/build/write_buildflag_header.py gen/build/chromeos_buildflags.h.flags obj/third_party/mini_chromium/mini_chromium/build/buildflag_header_h.stamp
+
+build obj/third_party/mini_chromium/mini_chromium/build/chromeos_buildflags.stamp: stamp gen/build/chromeos_buildflags.h
+subninja obj/third_party/zlib/zlib.ninja
+subninja obj/tools/base94_encoder.ninja
+subninja obj/tools/crashpad_database_util.ninja
+subninja obj/tools/crashpad_http_upload.ninja
+subninja obj/tools/generate_dump.ninja
+subninja obj/tools/tool_support.ninja
+subninja obj/util/net.ninja
+subninja obj/util/no_cfi_icall.ninja
+subninja obj/util/util.ninja
+subninja obj/util/util_test.ninja

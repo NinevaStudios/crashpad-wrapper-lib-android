@@ -1,0 +1,19 @@
+defines = -DNDEBUG
+framework_dirs =
+include_dirs = -I../.. -Igen -I../../third_party/mini_chromium/mini_chromium
+cflags = -Wall -Wendif-labels -Werror -Wextra -Wextra-semi -Wheader-hygiene -Wnewline-eof -Wno-missing-field-initializers -Wno-unused-parameter -Wsign-compare -Wstring-conversion -Wvla -fno-exceptions -fno-rtti -fno-strict-aliasing -fobjc-call-cxx-cdtors -fstack-protector-all -fvisibility-inlines-hidden -fvisibility=hidden -fPIC -O3 -fdata-sections -ffunction-sections -Wexit-time-destructors -Wimplicit-fallthrough
+cflags_cc = -std=c++17
+label_name = crashpad_handler_trampoline
+target_output_name = libcrashpad_handler_trampoline.so
+
+build obj/handler/linux/crashpad_handler_trampoline.handler_trampoline.o: cxx ../../handler/linux/handler_trampoline.cc
+  source_file_part = handler_trampoline.cc
+  source_name_part = handler_trampoline
+
+build ./libcrashpad_handler_trampoline.so: link obj/handler/linux/crashpad_handler_trampoline.handler_trampoline.o || obj/util/no_cfi_icall.stamp obj/third_party/mini_chromium/mini_chromium/build/build.stamp obj/third_party/mini_chromium/mini_chromium/build/buildflag_header_h.stamp
+  ldflags = -Wl,--as-needed -Wl,-z,noexecstack -Wl,-O1 -Wl,--gc-sections
+  libs = -llog
+  frameworks =
+  swiftmodules =
+  output_extension = 
+  output_dir = .

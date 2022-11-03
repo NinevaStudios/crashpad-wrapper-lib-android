@@ -1,0 +1,14 @@
+defines = -DNDEBUG
+framework_dirs =
+include_dirs =
+label_name = crashpad_snapshot_test
+target_output_name = crashpad_snapshot_test
+
+
+build ./crashpad_snapshot_test: link obj/snapshot/snapshot_test.cpu_context_test.o obj/snapshot/snapshot_test.memory_snapshot_test.o obj/snapshot/minidump/snapshot_test.process_snapshot_minidump_test.o obj/snapshot/linux/snapshot_test.debug_rendezvous_test.o obj/snapshot/linux/snapshot_test.exception_snapshot_linux_test.o obj/snapshot/linux/snapshot_test.process_reader_linux_test.o obj/snapshot/linux/snapshot_test.system_snapshot_linux_test.o obj/snapshot/linux/snapshot_test.test_modules.o obj/snapshot/sanitized/snapshot_test.process_snapshot_sanitized_test.o obj/snapshot/sanitized/snapshot_test.sanitization_information_test.o obj/snapshot/crashpad_types/snapshot_test.crashpad_info_reader_test.o obj/snapshot/crashpad_types/snapshot_test.image_annotation_reader_test.o obj/snapshot/elf/snapshot_test.elf_image_reader_test.o obj/snapshot/elf/snapshot_test.elf_image_reader_test_note.o obj/snapshot/posix/snapshot_test.timezone_test.o obj/test/libgooglemock_main.a obj/snapshot/libtest_support.a obj/snapshot/libsnapshot.a obj/snapshot/libcontext.a obj/third_party/mini_chromium/mini_chromium/base/libbase.a obj/util/libutil.a obj/compat/libcompat.a obj/client/libcommon.a obj/minidump/libformat.a obj/test/libtest.a obj/third_party/googletest/libgoogletest.a obj/third_party/googletest/libgooglemock.a | ../../snapshot/elf/test_exported_symbols.sym || obj/snapshot/snapshot_test.stamp obj/third_party/mini_chromium/mini_chromium/build/build.stamp obj/third_party/mini_chromium/mini_chromium/build/buildflag_header_h.stamp obj/util/no_cfi_icall.stamp obj/third_party/zlib/zlib.stamp obj/third_party/lss/lss.stamp
+  ldflags = -Wl,--as-needed -Wl,-z,noexecstack -Wl,-O1 -Wl,--gc-sections -Wl,--dynamic-list,../../snapshot/elf/test_exported_symbols.sym
+  libs = -ldl -llog -lz
+  frameworks =
+  swiftmodules =
+  output_extension = 
+  output_dir = .

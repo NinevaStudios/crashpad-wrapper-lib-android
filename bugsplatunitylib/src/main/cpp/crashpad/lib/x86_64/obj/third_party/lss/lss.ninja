@@ -1,0 +1,8 @@
+defines = -DNDEBUG -DCRASHPAD_LSS_SOURCE_EMBEDDED
+framework_dirs =
+include_dirs =
+label_name = lss
+target_output_name = lss
+
+
+build obj/third_party/lss/lss.stamp: stamp

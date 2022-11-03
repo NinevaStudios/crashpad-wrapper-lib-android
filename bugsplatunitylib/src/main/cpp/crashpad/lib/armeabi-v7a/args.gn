@@ -1,0 +1,4 @@
+target_os = "android"
+target_cpu = "arm"
+android_ndk_root = "/Users/nineva/Library/Android/sdk/ndk/21.4.7075529"
+android_api_level = 21

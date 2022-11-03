@@ -1,0 +1,23 @@
+defines = -DCRASHPAD_INFO_SIZE_TEST_MODULE_SMALL -DNDEBUG -DCRASHPAD_ZLIB_SOURCE_SYSTEM
+framework_dirs =
+include_dirs = -I../.. -Igen -I../../third_party/mini_chromium/mini_chromium -I../../compat/linux -I../../compat/android -I../../compat/non_win
+asmflags =
+cflags = -Wall -Wendif-labels -Werror -Wextra -Wextra-semi -Wheader-hygiene -Wnewline-eof -Wno-missing-field-initializers -Wno-unused-parameter -Wsign-compare -Wstring-conversion -Wvla -fno-exceptions -fno-rtti -fno-strict-aliasing -fobjc-call-cxx-cdtors -fstack-protector-all -fvisibility-inlines-hidden -fvisibility=hidden -fPIC -O3 -fdata-sections -ffunction-sections -Wexit-time-destructors -Wimplicit-fallthrough
+cflags_cc = -std=c++17
+label_name = crashpad_snapshot_test_module_small
+target_output_name = crashpad_snapshot_test_module_small
+
+build obj/snapshot/crashpad_snapshot_test_module_small.crashpad_info_size_test_module.o: cxx ../../snapshot/crashpad_info_size_test_module.cc || obj/third_party/mini_chromium/mini_chromium/build/chromeos_buildflags.stamp
+  source_file_part = crashpad_info_size_test_module.cc
+  source_name_part = crashpad_info_size_test_module
+build obj/snapshot/crashpad_snapshot_test_module_small.crashpad_info_size_test_note.o: asm ../../snapshot/crashpad_info_size_test_note.S || obj/third_party/mini_chromium/mini_chromium/build/chromeos_buildflags.stamp
+  source_file_part = crashpad_info_size_test_note.S
+  source_name_part = crashpad_info_size_test_note
+
+build ./crashpad_snapshot_test_module_small.so: solink_module obj/snapshot/crashpad_snapshot_test_module_small.crashpad_info_size_test_module.o obj/snapshot/crashpad_snapshot_test_module_small.crashpad_info_size_test_note.o obj/util/libutil.a obj/compat/libcompat.a obj/third_party/mini_chromium/mini_chromium/base/libbase.a || obj/third_party/mini_chromium/base.stamp obj/util/no_cfi_icall.stamp obj/third_party/mini_chromium/mini_chromium/build/build.stamp obj/third_party/mini_chromium/mini_chromium/build/buildflag_header_h.stamp obj/third_party/zlib/zlib.stamp obj/third_party/lss/lss.stamp
+  ldflags = -Wl,--as-needed -Wl,-z,noexecstack -Wl,-O1 -Wl,--gc-sections
+  libs = -llog -lz
+  frameworks =
+  swiftmodules =
+  output_extension = .so
+  output_dir = .

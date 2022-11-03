@@ -1,0 +1,22 @@
+defines = -DNDEBUG
+framework_dirs =
+include_dirs = -I../../third_party/googletest/googletest/googlemock -I../../third_party/googletest/googletest/googlemock/include -I../../third_party/googletest/googletest/googletest/include
+cflags = -Wall -Wendif-labels -Werror -Wextra -Wextra-semi -Wheader-hygiene -Wnewline-eof -Wno-missing-field-initializers -Wno-unused-parameter -Wsign-compare -Wstring-conversion -Wvla -fno-exceptions -fno-rtti -fno-strict-aliasing -fobjc-call-cxx-cdtors -fstack-protector-all -fvisibility-inlines-hidden -fvisibility=hidden -fPIC -O3 -fdata-sections -ffunction-sections -Wexit-time-destructors -Wimplicit-fallthrough
+cflags_cc = -std=c++17
+label_name = gmock_link_test
+target_output_name = gmock_link_test
+
+build obj/third_party/googletest/googletest/googlemock/test/gmock_link_test.gmock_link2_test.o: cxx ../../third_party/googletest/googletest/googlemock/test/gmock_link2_test.cc
+  source_file_part = gmock_link2_test.cc
+  source_name_part = gmock_link2_test
+build obj/third_party/googletest/googletest/googlemock/test/gmock_link_test.gmock_link_test.o: cxx ../../third_party/googletest/googletest/googlemock/test/gmock_link_test.cc
+  source_file_part = gmock_link_test.cc
+  source_name_part = gmock_link_test
+
+build ./gmock_link_test: link obj/third_party/googletest/googletest/googlemock/test/gmock_link_test.gmock_link2_test.o obj/third_party/googletest/googletest/googlemock/test/gmock_link_test.gmock_link_test.o obj/third_party/googletest/libgooglemock.a obj/third_party/googletest/libgooglemock_main.a obj/third_party/googletest/libgoogletest.a
+  ldflags = -Wl,--as-needed -Wl,-z,noexecstack -Wl,-O1 -Wl,--gc-sections
+  libs =
+  frameworks =
+  swiftmodules =
+  output_extension = 
+  output_dir = .
