@@ -61,8 +61,8 @@ Java_com_ninevastudios_bugsplatunitylib_BugSplatBridge_jniInitBugSplat(JNIEnv *e
 
     // Start Crashpad crash handler
     static auto *client = new CrashpadClient();
-    return client->StartHandlerAtCrash(handler, reportsDir, metricsDir, url, annotations,
-                                arguments, attachments);
+    return client->StartHandler(handler, reportsDir, metricsDir, url, annotations,
+                                arguments, true, true, attachments);
 }
 extern "C"
 JNIEXPORT void JNICALL
