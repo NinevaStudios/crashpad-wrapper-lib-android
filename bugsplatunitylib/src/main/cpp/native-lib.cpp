@@ -29,7 +29,7 @@ Java_com_ninevastudios_bugsplatunitylib_BugSplatBridge_jniInitBugSplat(JNIEnv *e
     string databaseString = env->GetStringUTFChars(database, nullptr);
 
     // Crashpad upload URL for BugSplat database
-    string url = "http://" + databaseString + ".bugsplat.com/post/bp/crash/crashpad.php";
+    string url = "https://" + databaseString + ".bugsplat.com/post/bp/crash/crashpad.php";
 
     // Crashpad annotations
     map<string, string> annotations;
@@ -56,9 +56,6 @@ Java_com_ninevastudios_bugsplatunitylib_BugSplatBridge_jniInitBugSplat(JNIEnv *e
 
     // File paths of attachments to be uploaded with the minidump file at crash time - default bundle limit is 20MB
     vector<FilePath> attachments;
-    FilePath attachment(dataDir + "/files/attachment.txt");
-    attachments.push_back(attachment);
-
     // Start Crashpad crash handler
     static auto *client = new CrashpadClient();
     return client->StartHandlerAtCrash(handler, reportsDir, metricsDir, url, annotations,
